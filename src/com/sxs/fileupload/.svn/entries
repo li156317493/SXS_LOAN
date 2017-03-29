@@ -1,0 +1,34 @@
+10
+
+dir
+21
+svn://192.168.10.222/sxs_loan/src/com/sxs/fileupload
+svn://192.168.10.222
+
+
+
+2017-02-17T11:09:46.889440Z
+21
+tanlf
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+408f9574-1308-4e8e-ad29-1c0aa56a30d9
+
+model
+dir
+
+service
+dir
+

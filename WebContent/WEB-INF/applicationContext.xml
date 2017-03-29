@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:aop="http://www.springframework.org/schema/aop" 
+    xmlns:tx="http://www.springframework.org/schema/tx"      
+    xsi:schemaLocation="http://www.springframework.org/schema/beans        
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd        
+    http://www.springframework.org/schema/context        
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+  	
+ 	<!-- 自动注入配置 -->
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor" />
+    <!-- 配置数据源 -->
+	<bean id="dataSource"  
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+	        <value>org.logicalcobwebs.proxool.ProxoolDriver</value>
+	    </property>
+	    <property name="url">
+	        <value>proxool.local</value>
+	    </property>
+    </bean>
+    <!-- hibernate配置 -->
+    <bean id="sessionFactory"  
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+        <property name="hibernateProperties">  
+            <props>  
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>  
+                <prop key="hibernate.show_sql">false</prop>  
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop> 
+                <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>  
+                <prop key="hibernate.cache.use_query_cache">false</prop>  
+                <prop key="hibernate.jdbc.batch_size">50</prop>  
+                <!-- 
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                 -->
+                <prop key="hibernate.hbm2ddl.auto">none</prop>
+                <prop key="jdbc.use_scrollable_resultset">false</prop>
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>  
+            </props>  
+        </property>
+        <!-- 自动扫描映射文件 -->
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:com/sxs/domain/</value>
+			</list>
+		</property> 	
+    </bean>
+    
+    <bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:application.properties</value>
+			</list>
+		</property>
+	</bean>
+    
+    
+	<!-- 配置事务管理 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />  
+    </bean>
+    <!-- 使用注解事物 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>  
+    
+     <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="create*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="merge*" propagation="REQUIRED" />
+            <tx:method name="del*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
+            <tx:method name="put*" propagation="REQUIRED" />
+            <tx:method name="use*" propagation="REQUIRED"/>
+<!--        hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到 -->
+            <tx:method name="get*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="count*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="find*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="list*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="query*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="*" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    <aop:config  proxy-target-class="true">
+<!--    只对业务逻辑层实施事务 -->
+        <aop:pointcut id="txPointcut" expression="execution(* com.sxs..service..*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    </aop:config>
+    <!-- 自动注入配置，扫描指定的包 -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.sxs"/>
+	
+	<import resource="applicationContext-mongo.xml"/>
+	
+</beans>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.sxs.domain.Systemlog" table="mh_systemlog">
+        <id name="id" type="java.lang.Long">
+            <column name="ID"  scale="0" />
+            <generator class="native" >
+			</generator>
+        </id>
+        <property name="createTime" type="java.lang.String">
+            <column name="CREATETIME" length="32" />
+        </property>
+        <property name="description" type="java.lang.String">
+            <column name="description" length="640" />
+        </property>
+        <property name="logType" type="java.lang.String">
+            <column name="logType" length="32" />
+        </property>
+        <property name="desc1" type="java.lang.String">
+            <column name="DESC1" length="320"  />
+        </property>
+        <property name="desc2" type="java.lang.String">
+            <column name="DESC2" length="320"  />
+        </property>
+        <property name="desc3" type="java.lang.String">
+            <column name="DESC3" length="320"  />
+        </property>
+        <property name="desc4" type="java.lang.String">
+            <column name="DESC4" length="320"  />
+        </property>
+        <many-to-one name="user"  lazy="false" class="com.sxs.domain.User" >
+            <column name="USERID" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

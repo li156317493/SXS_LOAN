@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.sxs.domain.User" table="mh_users" >
+        <id name="id" type="java.lang.Integer">
+            <column name="ID"  scale="0" />
+            <generator class="native"  >
+			</generator>
+        </id>
+        <property name="account" type="java.lang.String">
+            <column name="ACCOUNT" length="32"  />
+        </property>
+        <property name="passWord" type="java.lang.String">
+            <column name="PASSWORD" length="32"  />
+        </property>
+        <property name="createTime" type="java.lang.String">
+            <column name="CREATETIME" length="32" />
+        </property>
+        <property name="loginCount" type="java.lang.Integer">
+            <column name="LOGINCOUNT" precision="6" scale="0" />
+        </property>
+        <property name="userType" type="java.lang.String">
+            <column name="USERTYPE" length="32"  />
+        </property>
+         <property name="status" type="java.lang.Integer">
+            <column name="STATUS" precision="2" scale="0"/>
+        </property>
+        <property name="desc1" type="java.lang.String">
+            <column name="DESC1" length="320"  />
+        </property>
+        <property name="desc2" type="java.lang.String">
+            <column name="DESC2" length="320"  />
+        </property>
+        <property name="desc3" type="java.lang.String">
+            <column name="DESC3" length="320"  />
+        </property>
+        <property name="desc4" type="java.lang.String">
+            <column name="DESC4" length="320"  />
+        </property>
+        <set name="systemlogs" cascade="all"  lazy="extra" order-by="id" >
+            <key>
+                <column name="USERID"  />
+            </key>
+            <one-to-many  class="com.sxs.domain.Systemlog" />
+        </set>
+    </class>
+</hibernate-mapping>

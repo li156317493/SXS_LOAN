@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<proxool-config>  
+    <proxool>  
+        <alias>local</alias>
+       <driver-url>jdbc:mysql://192.168.1.199:3306/ahyc_mh?characterEncoding=UTF-8</driver-url>
+        <driver-class>com.mysql.jdbc.Driver</driver-class>
+        <driver-properties>  
+        <property name="user" value="root"/>
+         <property name="password" value="root"/>
+         <property name="connection.autoreconnect" value="true"/>
+         <property name="connection.autocommit" value="ture"/>
+        </driver-properties>
+        <maximum-connection-count>300</maximum-connection-count>
+        <minimum-connection-count>30</minimum-connection-count> 
+        <house-keeping-sleep-time>90000</house-keeping-sleep-time>
+        <simultaneous-build-throttle>100</simultaneous-build-throttle>
+        <prototype-count>10</prototype-count>
+        <test-before-use>true</test-before-use>
+        <house-keeping-test-sql>select current_date()</house-keeping-test-sql>  
+    </proxool>  
+</proxool-config>   
