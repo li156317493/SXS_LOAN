@@ -28,4 +28,8 @@ public interface IFileUploadService  {
 	
 	Result uploadByteFile(File file) throws Exception;
 	
+	
+
+
+	
 }
